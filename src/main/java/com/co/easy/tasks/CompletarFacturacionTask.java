@@ -6,16 +6,12 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Enter;
-import net.serenitybdd.screenplay.actions.Scroll;
 import net.serenitybdd.screenplay.conditions.Check;
 import net.serenitybdd.screenplay.matchers.WebElementStateMatchers;
 import net.serenitybdd.screenplay.questions.WebElementQuestion;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -83,11 +79,7 @@ public class CompletarFacturacionTask implements Task {
                 Click.on(BTN_METODO_ENTREGA)
         );
 
-        String departamentoModificado = departamentoExcel.substring(0, 1).toUpperCase() + departamentoExcel.substring(1).toLowerCase();
-
         String validacionCalleFacturacion = LBL_CALLE.resolveFor(actor).getText();
-        String validacionCiudadFacturacion = LBL_CIUDAD.resolveFor(actor).getText();
-        String validacionDepartamentoFacturacion = LBL_DEPARTAMENTO.resolveFor(actor).getText();
 
         if (!validacionCalleFacturacion.equals(direccionExcel)) {
             throw new DatosEntregaNoCoincidenException(String.format(
@@ -97,6 +89,8 @@ public class CompletarFacturacionTask implements Task {
             ));
         }
 
+        String validacionCiudadFacturacion = LBL_CIUDAD.resolveFor(actor).getText();
+
         if (!validacionCiudadFacturacion.equals(ciudadExcel)) {
             throw new DatosEntregaNoCoincidenException(String.format(
                     "La ciudad en facturación [%s] no coincide con la ciudad del Excel [%s]",
@@ -105,6 +99,9 @@ public class CompletarFacturacionTask implements Task {
             ));
         }
 
+        String validacionDepartamentoFacturacion = LBL_DEPARTAMENTO.resolveFor(actor).getText();
+        String departamentoModificado = departamentoExcel.substring(0, 1).toUpperCase() + departamentoExcel.substring(1).toLowerCase();
+
         if (!validacionDepartamentoFacturacion.equals(departamentoModificado)) {
             throw new DatosEntregaNoCoincidenException(String.format(
                     "El departamento en facturación [%s] no coincide con el departamento del Excel [%s]",
@@ -112,43 +109,6 @@ public class CompletarFacturacionTask implements Task {
                     departamentoModificado
             ));
         }
-
-        LocalDate fechaActual = LocalDate.now();
-        LocalDate fechaEntrega = fechaActual.plusDays(5);
-        int diaDeEntrega = fechaEntrega.getDayOfMonth();
-
-        actor.attemptsTo(
-                Enter.keyValues(String.format("%s %s", nombreExcel, apellidoExcel)).into(TXT_NOMBRE_RECIBE),
-
-                Check.whether(WebElementQuestion.stateOf(BTN_FECHA_ENTREGA), WebElementStateMatchers.isNotVisible())
-                        .andIfSo(
-
-                                WaitUntil.the(BTN_FECHA_ENTREGA, isVisible()).forNoMoreThan(10).seconds(),
-                                Scroll.to(BTN_FECHA_ENTREGA)
-                        ),
-                Click.on(BTN_FECHA_ENTREGA),
-                Click.on(BTN_MES_SIGUIENTE),
-                Click.on(BTN_DIA_ENTREGA.of(String.valueOf(diaDeEntrega))),
-                Scroll.to(BTN_METODO_PAGO)
-        );
-
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM 'de' yyyy");
-            LocalDate fechaParseada = LocalDate.parse(LBL_FECHA_ENTREGA.resolveFor(actor).getText(), formatter);
-
-            if (fechaParseada.getDayOfMonth() != diaDeEntrega) {
-                throw new FechaEntregaIncorrectaException(String.format(
-                        "La fecha de entrega en la factura [%s] es diferente a la fecha de entrega seleccionada [%s]",
-                        LBL_FECHA_ENTREGA.resolveFor(actor).getText(),
-                        fechaEntrega));
-            }
-        } catch (DateTimeParseException e) {
-            e.printStackTrace();
-        }
-
-        actor.attemptsTo(
-                Click.on(BTN_METODO_PAGO)
-        );
 
         String validacionProductoEnFacturacion = LBL_PRODUCTO_FACTURACION.resolveFor(actor).getText();
 
