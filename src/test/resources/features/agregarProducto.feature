@@ -16,6 +16,6 @@
         | url   | producto | correo |
 ##@externaldata@parametros/Datos.xlsx@AgregarProducto
    |https://www.easy.com.co/   |Nevecon no frost samsung 778 Litros   |santiago17@email.com|
-   |https://www.easy.com.co/   |Lavadora Ivy 18kg digital gris Haceb   |santiago17@email.com|
+   |https://www.easy.com.co/   |Llanta 185/60 R14 Kenda KR20   |santiago17@email.com|
    |https://www.easy.com.co/   |Ahumador Mediano Basik   |santiago17@email.com|
    |https://www.easy.com.co/   |Biblioteca Wick Roma 110x30x24Cm   |santiago17@email.com|
