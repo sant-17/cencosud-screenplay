@@ -1,5 +1,6 @@
 package com.co.easy.stepDefinitions;
 
+import com.co.easy.questions.ValidarProducto;
 import com.co.easy.tasks.AgregarAlCarritoTask;
 import com.co.easy.tasks.BuscarProductoTask;
 import com.co.easy.tasks.CompletarFacturacionTask;
@@ -10,10 +11,14 @@ import io.cucumber.java.es.Dado;
 import io.cucumber.java.es.Entonces;
 import io.cucumber.java.es.Y;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import net.serenitybdd.screenplay.GivenWhenThen;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
+import net.serenitybdd.screenplay.ensure.Ensure;
 
+import static com.co.easy.userInterfaces.FacturacionUI.LBL_EMAIL_FACTURACION;
+import static com.co.easy.userInterfaces.FacturacionUI.LBL_PRODUCTO_FACTURACION;
 import static net.serenitybdd.screenplay.actors.OnStage.setTheStage;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorCalled;
 
@@ -56,6 +61,12 @@ public class AgregarProductoStepDefinition {
     public void llenareLosDatosDeFacturacionConElCorreoCorreoYProductoProducto(String correo, String producto) {
         OnStage.theActorInTheSpotlight().attemptsTo(
                 CompletarFacturacionTask.conProducto(producto, correo)
+        );
+
+        Ensure.that(LBL_EMAIL_FACTURACION).text().isEqualTo(correo);
+
+        OnStage.theActorInTheSpotlight().should(
+                GivenWhenThen.seeThat(ValidarProducto.value(LBL_PRODUCTO_FACTURACION, producto))
         );
     }
 }

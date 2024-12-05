@@ -66,7 +66,7 @@ public class FacturacionUI {
 
     public static final Target BTN_DIA_ENTREGA = Target
             .the("Dia Fecha De Entrega")
-            .locatedBy("//div[@class='react-datepicker__week']/div[text()='{0}']");
+            .locatedBy("//div[contains(@class, 'day--keyboard-selected')]");
 
     public static final Target LBL_FECHA_ENTREGA = Target
             .the("Fecha de entrega")

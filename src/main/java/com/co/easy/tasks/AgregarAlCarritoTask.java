@@ -68,7 +68,7 @@ public class AgregarAlCarritoTask implements Task {
                 Click.on(BTN_CONFIRMAR),
                 WaitUntil.the(LBL_DIRECCION_ENTREGA_COMPLETO.of(direccionEntrega), isVisible()).forNoMoreThan(25).seconds(),
                 Click.on(BTN_NUEVO_AGREGAR_CARRITO),
-                WaitUntil.the(LBL_PRODUCTO_EN_MINICARRITO, isPresent()).forNoMoreThan(10).seconds()
+                WaitUntil.the(LBL_PRODUCTO_EN_MINICARRITO, isVisible()).forNoMoreThan(10).seconds()
         );
 
         String validacionProductoEnMinicarrito = LBL_PRODUCTO_EN_MINICARRITO.resolveFor(actor).getText();
